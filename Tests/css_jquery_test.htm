@@ -1,0 +1,25 @@
+<html>
+	<head>
+	<script
+	  src="https://code.jquery.com/jquery-3.2.1.js"
+	  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+	  crossorigin="anonymous"></script>
+	
+	<style>
+		#css_mod{
+			color:red;
+			background-color:yellow;
+		}
+	</style>
+	<script>
+		$(document).ready(function(){
+			$("#jquery_mod").css({"background-color": "green", "color": "white"});
+		});
+	</script>
+	</head>
+	<body>
+		<p>P tag with no modification</p>
+		<p id="css_mod">P tag modified with css<p>
+		<p id="jquery_mod">P tag modified with jquery</p>
+	</body>
+</html>
