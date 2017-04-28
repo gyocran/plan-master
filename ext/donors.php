@@ -55,11 +55,9 @@
 		function get_gender_statistics($grant_package_id){
 			$str_query="SELECT sa.student_gender as gender,count(sa.student_gender) as count FROM scholarship_package sp inner join sponsored_student ss on sp.sponsored_student_sponsored_student_id = ss.sponsored_student_id inner join student_applicant sa on ss.student_applicant_student_applicant_id = sa.student_applicant_id WHERE grant_package_grant_package_id = $grant_package_id group by sa.student_gender";
 			if(!$this->sql_query($str_query)){
-				$this->error=$this->log_error(LOG_LEVEL_DB_FAIL,11,"error while getting all grant packages. see error {$this->error} for details.");
+				$this->error=$this->log_error(LOG_LEVEL_DB_FAIL,11,"error while getting gender statistics. see error {$this->error} for details.");
             return false;
 			}
-			// echo $str_query;
-        // return $this->fetch();
 		return true;
         }
 		
@@ -230,6 +228,42 @@
 			}
 			// echo $str_query;
         // return $this->fetch();
+		return $this->fetch();
+		}
+		
+		function get_mother_occupation_count($grant_id){
+			$str_query="SELECT name,(SELECT count(app_mother_occupation) FROM `student_applicant` WHERE app_grant_id=$grant_id and app_mother_occupation = `application_occupation`.application_occupation_id) as occupation_count FROM `application_occupation`";
+			if(!$this->sql_query($str_query)){
+				$this->error=$this->log_error(LOG_LEVEL_DB_FAIL,11,"error while getting mothers' occupation. see error {$this->error} for details.");
+            return false;
+			}
+		return $this->fetch();
+		}
+		
+		function get_father_occupation_count($grant_id){
+			$str_query="SELECT name,(SELECT count(app_father_occupation) FROM `student_applicant` WHERE app_grant_id=$grant_id and app_father_occupation = `application_occupation`.application_occupation_id) as occupation_count FROM `application_occupation`";
+			if(!$this->sql_query($str_query)){
+				$this->error=$this->log_error(LOG_LEVEL_DB_FAIL,11,"error while getting mothers' occupation. see error {$this->error} for details.");
+            return false;
+			}
+		return $this->fetch();
+		}
+		
+		function get_english_grades($grant_id){
+			$str_query="SELECT english,count(english) as grade_count FROM `grade_year` gy inner join `school_attendance` sa on gy.school_attendance_school_attendance_id = sa.school_attendance_id inner join `scholarship_package` sp on sa.sponsored_student_sponsored_student_id = sp.sponsored_student_sponsored_student_id where sp.grant_package_grant_package_id = $grant_id group by english";
+			if(!$this->sql_query($str_query)){
+				$this->error=$this->log_error(LOG_LEVEL_DB_FAIL,11,"error while getting english grades. see error {$this->error} for details.");
+            return false;
+			}
+		return $this->fetch();
+		}
+		
+		function get_math_grades($grant_id){
+			$str_query="SELECT math,count(math) as grade_count FROM `grade_year` gy inner join `school_attendance` sa on gy.school_attendance_school_attendance_id = sa.school_attendance_id inner join `scholarship_package` sp on sa.sponsored_student_sponsored_student_id = sp.sponsored_student_sponsored_student_id where sp.grant_package_grant_package_id = $grant_id group by math";
+			if(!$this->sql_query($str_query)){
+				$this->error=$this->log_error(LOG_LEVEL_DB_FAIL,11,"error while getting math grades. see error {$this->error} for details.");
+            return false;
+			}
 		return $this->fetch();
 		}
 	}

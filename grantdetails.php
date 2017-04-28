@@ -42,10 +42,15 @@
 			border-width:2px;
 			border-color:#bfbfbf;
 			box-shadow: 5px 5px 5px grey;
-			position:absolute;
-			background-color:white;
-			width:48%;
-			height:250px;
+			<!-- position:absolute; -->
+			<!-- background-color:white; -->
+			<!-- width:48%; -->
+			<!-- height:250px; -->
+		}
+		td{
+			border-style: dashed;
+			background-color:#ccddff;
+			padding:10px;
 		}
 		.large_container{
 			<!-- position:absolute; -->
@@ -80,9 +85,9 @@
 			right: 25px;
 		}
 		#fatherAlive{
-			width: 20%;
-			position: absolute;
-			right: 26%;
+			<!-- width: 20%; -->
+			<!-- position: absolute; -->
+			<!-- right: 26%; -->
 		}
 		#programsGraph{
 			right:10px;
@@ -112,28 +117,53 @@
 		#financial_year_dropdown{
 			margin:10px 10px;
 		}
+		td{
+			margin: 10px;
+		}
+		.parallax {
+			/* The image used */
+			background-image: url("images/africa-village-smiling-children-02.jpg");
+
+			/* Set a specific height */
+			min-height: 700px; 
+
+			/* Create the parallax scrolling effect */
+			background-attachment: fixed;
+			background-position: center;
+			background-repeat: no-repeat;
+			background-size: cover;
+		}
 	</style>
 	<script> 
-		google.charts.load("current", {packages:["corechart"]});
-		google.charts.setOnLoadCallback(drawGenderChart);
-		google.charts.setOnLoadCallback(drawProgramareaChart);
-		google.charts.setOnLoadCallback(drawAcademicProgramChart);
-		google.charts.setOnLoadCallback(drawYearlyCostChart);
+		$(window).on('load',function(){
+			$('#myModal').modal('show');
+		});
+		$(document).ready(function(){
+			google.charts.load("current", {packages:["corechart"]});
+			google.charts.setOnLoadCallback(drawGenderChart);
+			google.charts.setOnLoadCallback(drawProgramareaChart);
+			google.charts.setOnLoadCallback(drawAcademicProgramChart);
+			google.charts.setOnLoadCallback(drawYearlyCostChart);
+			google.charts.setOnLoadCallback(drawMotherOccupationChart);
+			google.charts.setOnLoadCallback(drawFatherOccupationChart);
+			google.charts.setOnLoadCallback(drawEnglishGradesChart);
+			google.charts.setOnLoadCallback(drawMathGradesChart);
 		<!-- google.charts.setOnLoadCallback(drawParentChart); -->
+		});
 		
 		function drawYearlyCostChart(){
-		var data = google.visualization.arrayToDataTable([
-			['Year', 'Cost'],
-			<?php 
-			include_once("ext/donors.php");
-			$s=new donors();
-			$row=$s->get_grant_lifetime_cost_per_year($grant_id);
-			while($row){
-				echo "['$row[year_name]',$row[total_amount_per_year]],";
-				$row=$s->fetch();
-			}
-			?>
-		  ]);
+			var data = google.visualization.arrayToDataTable([
+				['Year', 'Cost'],
+				<?php 
+				include_once("ext/donors.php");
+				$s=new donors();
+				$row=$s->get_grant_lifetime_cost_per_year($grant_id);
+				while($row){
+					echo "['$row[year_name]',$row[total_amount_per_year]],";
+					$row=$s->fetch();
+				}
+				?>
+			  ]);
 		  
 			
 			var options = {
@@ -215,53 +245,175 @@
 		}
 		
 		function drawGenderChart() {
-		
-		var data = google.visualization.arrayToDataTable([
-			['Gender', 'Number'],
-			[gender[0].gender, parseInt(gender[0].count)], 
-			[gender[1].gender, parseInt(gender[1].count)]
-		  ]);
-		  
-        var options = {
-          title: 'Gender Statistics',
-          // legend: 'none',
-          // pieSliceText: 'label',
-          // slices: {  
-					// 0: {offset: 0.2},
-                    // 1: {offset: 0.3},
-                    // 14: {offset: 0.4},
-                    // 15: {offset: 0.5},
-          // },
-        };
+			var data = google.visualization.arrayToDataTable([
+				['Gender', 'Number'],
+				[gender[0].gender, parseInt(gender[0].count)], 
+				[gender[1].gender, parseInt(gender[1].count)]
+			  ]);
+			  
+			var options = {
+			  title: 'Gender Statistics',
+			  // legend: 'none',
+			  // pieSliceText: 'label',
+			  // slices: {  
+						// 0: {offset: 0.2},
+						// 1: {offset: 0.3},
+						// 14: {offset: 0.4},
+						// 15: {offset: 0.5},
+			  // },
+			};
 
-        var chart = new google.visualization.PieChart(document.getElementById('genderGraph'));
-        chart.draw(data, options);
-	  }
+			var chart = new google.visualization.PieChart(document.getElementById('genderGraph'));
+			chart.draw(data, options);
+		}
 	  
-	  function drawParentChart() {
-		
-		var data = google.visualization.arrayToDataTable([
-			['Parent', 'Number'],
-			['Mother', parseInt(mother[0].mother_alive)], 
-			['Father', parseInt(father[0].father_alive)]
-			// [gender[1].gender, parseInt(gender[1].count)]
-		  ]);
-		  
-        var options = {
-          title: 'Graph showing which parent of the students is alive',
-          // legend: 'none',
-          // pieSliceText: 'label',
-          // slices: {  
-					// 0: {offset: 0.2},
-                    // 1: {offset: 0.3},
-                    // 14: {offset: 0.4},
-                    // 15: {offset: 0.5},
-          // },
-        };
+		function drawParentChart() {
+			var data = google.visualization.arrayToDataTable([
+				['Parent', 'Number'],
+				['Mother', parseInt(mother[0].mother_alive)], 
+				['Father', parseInt(father[0].father_alive)]
+				// [gender[1].gender, parseInt(gender[1].count)]
+			  ]);
+			  
+			var options = {
+			  title: 'Graph showing which parent of the students is alive',
+			  // legend: 'none',
+			  // pieSliceText: 'label',
+			  // slices: {  
+						// 0: {offset: 0.2},
+						// 1: {offset: 0.3},
+						// 14: {offset: 0.4},
+						// 15: {offset: 0.5},
+			  // },
+			};
 
-        var chart = new google.visualization.PieChart(document.getElementById('parentGraph'));
-        chart.draw(data, options);
-	  }
+			var chart = new google.visualization.PieChart(document.getElementById('parentGraph'));
+			chart.draw(data, options);
+		}
+	  
+		function drawMotherOccupationChart(){
+			var data = google.visualization.arrayToDataTable([
+			['Occupation', 'Count'],
+				<?php 
+				include_once("ext/donors.php");
+				$s=new donors();
+				$row=$s->get_mother_occupation_count($grant_id);
+				while($row){
+					echo "['$row[name]',$row[occupation_count]],";
+					$row=$s->fetch();
+				}
+				?>
+			  ]);
+		  
+			
+			var options = {
+			  title: "Mothers' Occupation",
+			  // legend: 'none',
+			  // pieSliceText: 'label',
+			  // slices: {  
+						// 0: {offset: 0.2},
+						// 1: {offset: 0.3},
+						// 14: {offset: 0.4},
+						// 15: {offset: 0.5},
+			  // },
+			};
+			
+			var chart = new google.visualization.BarChart(document.getElementById('mother_occupation_graph'));
+			chart.draw(data, options);
+		}
+		
+		function drawFatherOccupationChart(){
+			var data = google.visualization.arrayToDataTable([
+				['Occupation', 'Count'],
+				<?php 
+				include_once("ext/donors.php");
+				$s=new donors();
+				$row=$s->get_father_occupation_count($grant_id);
+				while($row){
+					echo "['$row[name]',$row[occupation_count]],";
+					$row=$s->fetch();
+				}
+				?>
+			]);
+		  
+			
+			var options = {
+			  title: "Fathers' Occupation",
+			  // legend: 'none',
+			  // pieSliceText: 'label',
+			  // slices: {  
+						// 0: {offset: 0.2},
+						// 1: {offset: 0.3},
+						// 14: {offset: 0.4},
+						// 15: {offset: 0.5},
+			  // },
+			};
+			
+			var chart = new google.visualization.BarChart(document.getElementById('father_occupation_graph'));
+			chart.draw(data, options);
+		}
+		
+		function drawEnglishGradesChart(){
+			var data = google.visualization.arrayToDataTable([
+				['Grade', 'Count'],
+				<?php 
+				include_once("ext/donors.php");
+				$s=new donors();
+				$row=$s->get_english_grades($grant_id);
+				while($row){
+					echo "['$row[english]',$row[grade_count]],";
+					$row=$s->fetch();
+				}
+				?>
+			]);
+		  
+			
+			var options = {
+			  title: "English Grades",
+			  // legend: 'none',
+			  // pieSliceText: 'label',
+			  // slices: {  
+						// 0: {offset: 0.2},
+						// 1: {offset: 0.3},
+						// 14: {offset: 0.4},
+						// 15: {offset: 0.5},
+			  // },
+			};
+			
+			var chart = new google.visualization.BarChart(document.getElementById('english_grades_graph'));
+			chart.draw(data, options);
+		}
+		
+		function drawMathGradesChart(){
+			var data = google.visualization.arrayToDataTable([
+				['Grade', 'Count'],
+				<?php 
+				include_once("ext/donors.php");
+				$s=new donors();
+				$row=$s->get_math_grades($grant_id);
+				while($row){
+					echo "['$row[math]',$row[grade_count]],";
+					$row=$s->fetch();
+				}
+				?>
+			]);
+		  
+			
+			var options = {
+			  title: "Math Grades",
+			  // legend: 'none',
+			  // pieSliceText: 'label',
+			  // slices: {  
+						// 0: {offset: 0.2},
+						// 1: {offset: 0.3},
+						// 14: {offset: 0.4},
+						// 15: {offset: 0.5},
+			  // },
+			};
+			
+			var chart = new google.visualization.BarChart(document.getElementById('math_grades_graph'));
+			chart.draw(data, options);
+		}
 	  
 		var grantid=5; // for testing purposes
 		var grants=null;
@@ -484,47 +636,26 @@
 	</script>
 	</head>
 	<body>
-	
-		<div style="padding:1%">
-			<p>This is donors' page</p>
-			<?php
-			include_once("ext/donors.php");
-            // if($_SESSION[EW_PROJECT_NAME]["PROGRAM_AREA"]==0){
-                    
-                    echo "<b>Grant Package: </b><select name='grant_package_id' id='grant_package_id' >";
-                    echo "<option value='0'>--Select---</option>";
-                    $p=new donors();
-                    if($row=$p->get_grants()){
-						echo "<option value='{$row['grant_package_id']}' selected >{$row['name']}</option>";
-						$row=$p->fetch();
-                        while($row){
-                            $selected="";
-                            
-                            echo "<option value='{$row['grant_package_id']}' $selected >{$row['name']}</option>";
-                            $row=$p->fetch();
-                        }
-                    }
-				echo "</select> ";
-				// }
-		?>
+		<div class="parallax"></div>
 		
-			<button id="get_details" onclick="getGrantDetails()">Search</button>
-		<br>
-		<br>
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+		  <div class="modal-dialog" role="document">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">Welcome!</h4>
+			  </div>
+			  <div class="modal-body">
+				<img src="images/boy_laughing.jpg" style="object-fit:cover">
+			  </div>
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary">Save changes</button>
+			  </div>
+			</div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
 		
-		<!-- <table id="tableGrants" class="table table-striped"> -->
-                        <!-- <tr class="default_report_title"> -->
-                            <!-- <td></td> //commented out -->
-                            <!-- <th>Student ID</th> -->
-                            <!-- <th>Grant Package ID</th> -->
-                            <!-- <th>Grant Name</th> -->
-                            <!-- <th>Grant Code</th> -->
-                            <!-- <th>Grant Amount</th> -->
-                            <!-- <td></td> -->
-                        <!-- </tr> -->
-                    <!-- </table> -->
-					
-		</div>
 		<div class="container">
 		<div>
 		  <!-- Nav tabs -->
@@ -538,46 +669,76 @@
 		  <!-- Tab panes -->
 		  <div class="tab-content">
 			<div role="tabpanel" class="tab-pane active" id="students">
-				<br>
 				<div class="main_container">
-					<div id="genderGraph" class="medium_container"></div>
-					<div id="motherAlive" class="medium_container">
-						<h4>% with mother alive</h4>
-						<?php
-							include_once("ext/donors.php");
-							$s=new donors();
-							$row=$s->get_mother_status($grant_id);
-							$mother_alive=$row['mother_alive'];
-							$row=$s->get_sponsored_student_total($grant_id);
-							$total_sponsored_students=$row['total_students'];
-							// round function rounds number to 2 decimal places 
-							$mother_percentage = round((($mother_alive/$total_sponsored_students) * 100),2);
-							//while($row){
-								//$mother[] = $row;
-								//$row=$s->fetch();
-							//}
-							echo "<h3><b>$mother_percentage</b></h3>";
-						?>
-					</div>
-					<div id="fatherAlive" class="medium_container">
-						<h4>% with father alive</h4>
-						<?php
-							include_once("ext/donors.php");
-							$s=new donors();
-							$row=$s->get_father_status($grant_id);
-							$father_alive=$row['father_alive'];
-							$row=$s->get_sponsored_student_total($grant_id);
-							$total_sponsored_students=$row['total_students'];
-							// round function rounds number to 2 decimal places 
-							$father_percentage = round((($father_alive/$total_sponsored_students) * 100),2);
-							//while($row){
-								//$mother[] = $row;
-								//$row=$s->fetch();
-							//}
-							echo "<h3><b>$father_percentage</b></h3>";
-						?>
-					</div>
-					<div id="academicprogram_graph" class="medium_container"></div>
+					<table>
+						<tr>
+							<td>
+								<div id="genderGraph" class="medium_container"></div>
+							</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<!-- <td> -->
+								<!-- <div id="motherAlive"> -->
+									<!-- <h4>% with mother alive</h4> -->
+									<?php
+										//include_once("ext/donors.php");
+										//$s=new donors();
+										//$row=$s->get_mother_status($grant_id);
+										//$mother_alive=$row['mother_alive'];
+										//$row=$s->get_sponsored_student_total($grant_id);
+										//$total_sponsored_students=$row['total_students'];
+										// round function rounds number to 2 decimal places 
+										//$mother_percentage = round((($mother_alive/$total_sponsored_students) * 100),2);
+										//while($row){
+											//$mother[] = $row;
+											//$row=$s->fetch();
+										//}
+										//echo "<h3><b>$mother_percentage</b></h3>";
+									?>
+								<!-- </div> -->
+							<!-- </td> -->
+							<!-- <td> -->
+								<!-- <div id="fatherAlive"> -->
+									<!-- <h4>% with father alive</h4> -->
+									<?php
+										//include_once("ext/donors.php");
+										//$s=new donors();
+										//$row=$s->get_father_status($grant_id);
+										//$father_alive=$row['father_alive'];
+										//$row=$s->get_sponsored_student_total($grant_id);
+										//$total_sponsored_students=$row['total_students'];
+										// round function rounds number to 2 decimal places 
+										//$father_percentage = round((($father_alive/$total_sponsored_students) * 100),2);
+										//while($row){
+											//$mother[] = $row;
+											//$row=$s->fetch();
+										//}
+										//echo "<b>$father_percentage</b>";
+									?>
+								<!-- </div> -->
+							<!-- </td> -->
+							<td>
+								<div id="academicprogram_graph" class="medium_container"></div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div id="mother_occupation_graph" class="medium_container"></div>
+							</td>
+							<td>
+								<div id="father_occupation_graph" class="medium_container"></div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div id="english_grades_graph" class="medium_container"></div>
+							</td>
+							<td>
+								<div id="math_grades_graph" class="medium_container"></div>
+							</td>
+						</tr>
+					</table>
 				</div>
 			</div>
 			<div role="tabpanel" class="tab-pane" id="costs">
@@ -682,7 +843,7 @@
 		</div>
 
 		</div>
-	</div>
+	</div><!-- /.container -->
 	<script>
 		$(document).ready(function(){
 			$("#year_id").on('change',get_yearly_cost);

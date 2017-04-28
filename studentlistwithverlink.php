@@ -31,7 +31,7 @@ header("Pragma: no-cache"); // HTTP/1.0
 
         <link href="ext/style.css" rel="stylesheet">
         <script type="text/javascript" src="ext/jquery-1.11.0.js"></script>
-        <script type="text/javascript" src="ext/gen.js"></script>
+        <script type="text/javascript" src="ext/gen.js?n=1"></script>
         <script type="text/javascript">
             var page=1;
             var recCount=0;
@@ -88,7 +88,7 @@ header("Pragma: no-cache"); // HTTP/1.0
                     getStudentsInPaymentRequest();
                 }else if(searchType==5){
                     getScholarshipEndingStudents();
-                }else{ 
+                }else{
                     getStudents();
                 }
             }
@@ -443,7 +443,11 @@ header("Pragma: no-cache"); // HTTP/1.0
         </div>
 
     </div>
-        <script> newSearch();  </script>
+        <script> newSearch();  	</script>
+		
+		<a href="matchscholarshipattendance.php">
+			<button>Link</button>
+		</a>
     </body>
     
 </html>
